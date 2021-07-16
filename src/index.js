@@ -24,14 +24,15 @@ export class CalculatorApp extends Component {
         '*',
         '/',
         '='
-      ]
+      ],
+      previousValue: 0
     };
   }
 
   _handleClick = key => {
-    console.log(key);
     if (key == '+' || key == '-' || key == '*' || key == '/') {
-      console.log('Operations');
+      this.setState({ previousValue: document.getElementById('calc').value });
+      console.log(this.state.previousValue);
     } else if (key == '=') {
       console.log('Equal');
     } else {
@@ -64,7 +65,6 @@ export function Buttons_list(props) {
 }
 
 export function ButtonData(props) {
-  console.log(props.value);
   return (
     <button
       className="btn btn-primary m-2"
