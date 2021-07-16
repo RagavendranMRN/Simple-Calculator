@@ -23,18 +23,60 @@ export class CalculatorApp extends Component {
         '-',
         '*',
         '/',
-        '='
+        '=',
+        'CE'
       ],
-      previousValue: 0
+      previousValue: 0,
+      currentValue: 0,
+      currentOperator: ''
     };
+  }
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.currentValue !== this.state.currentValue) {
+      if (this.state.currentOperator == '+') {
+        const data =
+          parseInt(prevState.currentValue) + parseInt(this.state.currentValue);
+        console.log(data);
+        this.setState({
+          previousValue: data
+        });
+      } else if (this.state.currentOperator == '-') {
+        const data =
+          parseInt(prevState.currentValue) - parseInt(this.state.currentValue);
+        console.log(data);
+        this.setState({
+          previousValue: data
+        });
+      } else if (this.state.currentOperator == '*') {
+        const data =
+          parseInt(this.state.previousValue) *
+          parseInt(this.state.currentValue);
+        console.log(data);
+        this.setState({
+          previousValue: data
+        });
+      } else if (this.state.currentOperator == '/') {
+        const data =
+          parseInt(this.state.previousValue) /
+          parseInt(this.state.currentValue);
+        this.setState({
+          previousValue: data
+        });
+      }
+    }
   }
 
   _handleClick = key => {
     if (key == '+' || key == '-' || key == '*' || key == '/') {
-      this.setState({ previousValue: document.getElementById('calc').value });
-      console.log(this.state.previousValue);
+      this.setState({ currentValue: document.getElementById('calc').value });
+      this.setState({ currentOperator: key });
+      document.getElementById('calc').value = '';
     } else if (key == '=') {
-      console.log('Equal');
+      this.setState({ currentValue: document.getElementById('calc').value });
+      document.getElementById('calc').value =
+        this.state.previousValue + this.state.currentValue;
+    } else if (key == 'CE') {
+      document.getElementById('calc').value = '';
     } else {
       document.getElementById('calc').value =
         document.getElementById('calc').value + key;
@@ -43,10 +85,10 @@ export class CalculatorApp extends Component {
   render() {
     return (
       <div>
-        <h1 className="m-3">Simple Calculator!</h1>
+        <h3 className="m-3">Simple Calculator!</h3>
         <Buttons_list
           values={this.state.buttons}
-          onTrigger={this._handleClick}
+          onTrigger={this._handleClick.bind(this)}
         />
       </div>
     );
@@ -55,10 +97,15 @@ export class CalculatorApp extends Component {
 
 export function Buttons_list(props) {
   return (
-    <div className="m-3 p-5">
-      <input type="text" id="calc" className="form-control" />
+    <div className="m-2 p-5  bg-dark">
+      <input type="text" id="calc" className="form-control mb-3" />
       {props.values.map(b => (
-        <ButtonData key={b} value={b} onTrigger={props.onTrigger} />
+        <ButtonData
+          className="m-2 p-2"
+          key={b}
+          value={b}
+          onTrigger={props.onTrigger}
+        />
       ))}
     </div>
   );
