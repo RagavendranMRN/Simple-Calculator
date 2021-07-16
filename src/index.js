@@ -58,7 +58,7 @@ export function Buttons_list(props) {
     <div className="m-3 p-5">
       <input type="text" id="calc" className="form-control" />
       {props.values.map(b => (
-        <ButtonData value={b} onTrigger={props.onTrigger} />
+        <ButtonData key={b} value={b} onTrigger={props.onTrigger} />
       ))}
     </div>
   );
